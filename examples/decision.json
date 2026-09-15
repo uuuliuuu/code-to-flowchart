@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "title": "Decision",
+  "diagrams": [
+    {
+      "id": "shipping",
+      "title": "Shipping cost · early returns",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "shipping_cost(total, member)",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 1,
+              "end": 1
+            }
+          ]
+        },
+        {
+          "id": "negative",
+          "label": "total < 0?",
+          "row": 1,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 2,
+              "end": 2
+            }
+          ]
+        },
+        {
+          "id": "invalid",
+          "label": "Return None",
+          "row": 2,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 3,
+              "end": 3
+            }
+          ]
+        },
+        {
+          "id": "free",
+          "label": "member OR total >= 100?",
+          "row": 3,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 4,
+              "end": 4
+            }
+          ]
+        },
+        {
+          "id": "zero",
+          "label": "Return 0",
+          "row": 4,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 5,
+              "end": 5
+            }
+          ]
+        },
+        {
+          "id": "eight",
+          "label": "Return 8",
+          "row": 5,
+          "col": 0,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/decision.py",
+              "start": 6,
+              "end": 6
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "negative",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "negative",
+          "target": "invalid",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "negative",
+          "target": "free",
+          "label": "No",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "free",
+          "target": "zero",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "5",
+          "source": "free",
+          "target": "eight",
+          "label": "No",
+          "route": "direct"
+        }
+      ],
+      "notes": "Independent early returns; no execution of the input source."
+    }
+  ],
+  "coverage": {
+    "read": [
+      "examples/source/decision.py:1–6"
+    ],
+    "unread": [],
+    "unknown": [],
+    "status": "Complete for this function",
+    "assumptions": [
+      "Ordinary numeric total and boolean member; overloaded comparison/truthiness and interpreter failures not expanded."
+    ]
+  }
+}

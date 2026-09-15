@@ -1,0 +1,692 @@
+{
+  "version": 1,
+  "title": "Retry",
+  "diagrams": [
+    {
+      "id": "outer",
+      "title": "总览 · key 外层循环",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "fetch_first(keys, client, audit)",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 1,
+              "end": 1
+            }
+          ]
+        },
+        {
+          "id": "next",
+          "label": "取下一个 key：存在？",
+          "row": 1,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 2,
+              "end": 2
+            }
+          ]
+        },
+        {
+          "id": "none",
+          "label": "正常耗尽：返回 None",
+          "row": 2,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 16,
+              "end": 16
+            }
+          ]
+        },
+        {
+          "id": "empty",
+          "label": "not key?",
+          "row": 3,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 3,
+              "end": 3
+            }
+          ]
+        },
+        {
+          "id": "inner",
+          "label": "当前 key：运行 attempt 循环\n所有离开 try 的路径先执行 finally",
+          "row": 4,
+          "col": 0,
+          "kind": "call",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 15
+            }
+          ],
+          "detail": "attempts"
+        },
+        {
+          "id": "outcome",
+          "label": "内层循环的转移？",
+          "row": 5,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 15
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "label": "返回 result 给调用方",
+          "row": 6,
+          "col": 0,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 10,
+              "end": 10
+            }
+          ]
+        },
+        {
+          "id": "error",
+          "label": "传播异常给调用方",
+          "row": 6,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 11,
+              "end": 15
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "next",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "next",
+          "target": "none",
+          "label": "No · 正常耗尽",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "next",
+          "target": "empty",
+          "label": "Yes · 取得 key",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "empty",
+          "target": "next",
+          "label": "Yes · continue：跳过空 key，回到外层迭代步骤",
+          "route": "left"
+        },
+        {
+          "id": "5",
+          "source": "empty",
+          "target": "inner",
+          "label": "No",
+          "route": "direct"
+        },
+        {
+          "id": "6",
+          "source": "inner",
+          "target": "outcome",
+          "label": "详图完成 finally 后",
+          "route": "direct"
+        },
+        {
+          "id": "7",
+          "source": "outcome",
+          "target": "next",
+          "label": "break 内层 / 内层正常耗尽：继续取下一个 key",
+          "route": "left"
+        },
+        {
+          "id": "8",
+          "source": "outcome",
+          "target": "result",
+          "label": "return result",
+          "route": "direct"
+        },
+        {
+          "id": "9",
+          "source": "outcome",
+          "target": "error",
+          "label": "raise 原异常或 audit 异常",
+          "route": "direct"
+        }
+      ],
+      "notes": "独立入口 fetch_first。内层详图返回此调用点；continue 与 break 均回到取下一个 key，正常耗尽返回 None。"
+    },
+    {
+      "id": "attempts",
+      "title": "详图 · attempt 循环与恢复转移",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "从 outer:inner 进入；attempt = 0",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 5
+            }
+          ]
+        },
+        {
+          "id": "check",
+          "label": "attempt < 3?",
+          "row": 1,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 5
+            }
+          ]
+        },
+        {
+          "id": "exhausted",
+          "label": "内层正常耗尽 → outer:next\n当前实现中第三次超时会 raise，故该出口不可达",
+          "row": 2,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 5
+            }
+          ],
+          "detail": "outer"
+        },
+        {
+          "id": "body",
+          "label": "运行 try / except / finally\n得到恢复转移或 audit 异常",
+          "row": 3,
+          "col": 0,
+          "kind": "call",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 6,
+              "end": 15
+            }
+          ],
+          "detail": "body"
+        },
+        {
+          "id": "pending",
+          "label": "finally 完成后的转移？",
+          "row": 4,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 9,
+              "end": 15
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "label": "attempt += 1",
+          "row": 5,
+          "col": 0,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 5,
+              "end": 5
+            }
+          ]
+        },
+        {
+          "id": "break",
+          "label": "break → outer:next",
+          "row": 5,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 9,
+              "end": 9
+            }
+          ],
+          "detail": "outer"
+        },
+        {
+          "id": "return",
+          "label": "return result → outer:result",
+          "row": 6,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 10,
+              "end": 10
+            }
+          ],
+          "detail": "outer"
+        },
+        {
+          "id": "raise",
+          "label": "raise → outer:error",
+          "row": 7,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 11,
+              "end": 15
+            }
+          ],
+          "detail": "outer"
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "check",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "check",
+          "target": "exhausted",
+          "label": "No · 正常耗尽",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "check",
+          "target": "body",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "body",
+          "target": "pending",
+          "label": "audit 正常返回或抛出异常后",
+          "route": "direct"
+        },
+        {
+          "id": "5",
+          "source": "pending",
+          "target": "retry",
+          "label": "retry：仅 attempt 0 或 1 的 TimeoutError",
+          "route": "direct"
+        },
+        {
+          "id": "6",
+          "source": "retry",
+          "target": "check",
+          "label": "回到迭代条件检查",
+          "route": "left"
+        },
+        {
+          "id": "7",
+          "source": "pending",
+          "target": "break",
+          "label": "break：fetch 返回 None",
+          "route": "direct"
+        },
+        {
+          "id": "8",
+          "source": "pending",
+          "target": "return",
+          "label": "return：fetch 返回非 None",
+          "route": "right"
+        },
+        {
+          "id": "9",
+          "source": "pending",
+          "target": "raise",
+          "label": "raise：未处理异常或 audit 抛出",
+          "route": "right"
+        }
+      ],
+      "notes": "此页是语义展开，不是另一个源码函数。pending 是 Python 控制转移记号，非源码变量。回边必须先增加 attempt 再检查。"
+    },
+    {
+      "id": "body",
+      "title": "详图 · try / except / finally",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "从 attempts:body 进入",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 6,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "fetch",
+          "label": "client.fetch(key)\n外部实现缺失",
+          "row": 1,
+          "col": 0,
+          "kind": "unknown",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 7,
+              "end": 7
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "label": "result is None?",
+          "row": 2,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 8,
+              "end": 8
+            }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "捕获 TimeoutError：\nattempt == 2?",
+          "row": 2,
+          "col": 1,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 11,
+              "end": 12
+            }
+          ]
+        },
+        {
+          "id": "break",
+          "label": "待执行 break",
+          "row": 3,
+          "col": 0,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 9,
+              "end": 9
+            }
+          ]
+        },
+        {
+          "id": "return",
+          "label": "待执行 return result",
+          "row": 4,
+          "col": 0,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 10,
+              "end": 10
+            }
+          ]
+        },
+        {
+          "id": "raise",
+          "label": "待执行 raise TimeoutError",
+          "row": 3,
+          "col": 1,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 13,
+              "end": 13
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "label": "待执行 retry",
+          "row": 4,
+          "col": 1,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 11,
+              "end": 12
+            }
+          ]
+        },
+        {
+          "id": "other",
+          "label": "待执行传播其他异常",
+          "row": 5,
+          "col": 2,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 7,
+              "end": 7
+            }
+          ]
+        },
+        {
+          "id": "audit",
+          "label": "finally：audit(key, attempt)\n外部实现缺失；即使待执行 return 也先调用",
+          "row": 6,
+          "col": 0,
+          "kind": "unknown",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 14,
+              "end": 15
+            }
+          ]
+        },
+        {
+          "id": "resume",
+          "label": "audit 正常返回：恢复原待执行转移\n→ attempts:pending",
+          "row": 7,
+          "col": 0,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 9,
+              "end": 15
+            }
+          ],
+          "detail": "attempts"
+        },
+        {
+          "id": "override",
+          "label": "audit 抛出：覆盖待执行转移\n→ attempts:pending（raise）",
+          "row": 7,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/retry.py",
+              "start": 15,
+              "end": 15
+            }
+          ],
+          "detail": "attempts"
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "fetch",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "fetch",
+          "target": "result",
+          "label": "正常返回 result",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "fetch",
+          "target": "timeout",
+          "label": "抛出 TimeoutError",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "fetch",
+          "target": "other",
+          "label": "抛出非 TimeoutError 异常",
+          "route": "right"
+        },
+        {
+          "id": "5",
+          "source": "result",
+          "target": "break",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "6",
+          "source": "result",
+          "target": "return",
+          "label": "No",
+          "route": "left"
+        },
+        {
+          "id": "7",
+          "source": "timeout",
+          "target": "raise",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "8",
+          "source": "timeout",
+          "target": "retry",
+          "label": "No",
+          "route": "right"
+        },
+        {
+          "id": "9",
+          "source": "break",
+          "target": "audit",
+          "label": "break 待执行",
+          "route": "left"
+        },
+        {
+          "id": "10",
+          "source": "return",
+          "target": "audit",
+          "label": "return 待执行",
+          "route": "direct"
+        },
+        {
+          "id": "11",
+          "source": "raise",
+          "target": "audit",
+          "label": "raise 待执行",
+          "route": "right"
+        },
+        {
+          "id": "12",
+          "source": "retry",
+          "target": "audit",
+          "label": "retry 待执行",
+          "route": "direct"
+        },
+        {
+          "id": "13",
+          "source": "other",
+          "target": "audit",
+          "label": "其他异常待传播",
+          "route": "direct"
+        },
+        {
+          "id": "14",
+          "source": "audit",
+          "target": "resume",
+          "label": "正常返回",
+          "route": "direct"
+        },
+        {
+          "id": "15",
+          "source": "audit",
+          "target": "override",
+          "label": "audit 抛出任意异常",
+          "route": "direct"
+        }
+      ],
+      "notes": "pending 状态仅为静态图记号。所有 fetch 结果、break、return、捕获/未捕获异常都经过 audit；audit 异常覆盖原转移。迭代器与 truthiness 协议异常不在本例展开。"
+    }
+  ],
+  "coverage": {
+    "read": [
+      "examples/source/retry.py:1–16"
+    ],
+    "unknown": [
+      "client.fetch implementation",
+      "audit implementation; if it raises, overrides pending return/break/exception"
+    ],
+    "unread": [],
+    "status": "Function control flow covered; external internals unknown",
+    "assumptions": [
+      "keys is a conventional iterable; iterator and truthiness protocol internals not expanded"
+    ]
+  }
+}

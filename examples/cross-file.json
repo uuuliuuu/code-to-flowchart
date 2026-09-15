@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "title": "Cross File",
+  "diagrams": [
+    {
+      "id": "prepare",
+      "title": "Overview · prepare",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "prepare(raw, gateway)",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 4,
+              "end": 4
+            }
+          ]
+        },
+        {
+          "id": "normalize",
+          "label": "调用 normalize(raw)\n返回 item 后继续判断",
+          "row": 1,
+          "col": 0,
+          "kind": "call",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 5,
+              "end": 5
+            }
+          ],
+          "detail": "normalize"
+        },
+        {
+          "id": "valid",
+          "label": "item is None?",
+          "row": 2,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 6,
+              "end": 6
+            }
+          ]
+        },
+        {
+          "id": "invalid",
+          "label": "返回 status: invalid",
+          "row": 3,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 7,
+              "end": 7
+            }
+          ]
+        },
+        {
+          "id": "gateway",
+          "label": "gateway.submit(item)\n实现缺失：返回 receipt 或抛出异常",
+          "row": 4,
+          "col": 0,
+          "kind": "unknown",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 8,
+              "end": 8
+            }
+          ]
+        },
+        {
+          "id": "sent",
+          "label": "返回 status: sent 与 receipt",
+          "row": 5,
+          "col": 0,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 9,
+              "end": 9
+            }
+          ]
+        },
+        {
+          "id": "error",
+          "label": "异常传播给 prepare 调用方",
+          "row": 5,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/service.py",
+              "start": 8,
+              "end": 8
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "normalize",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "normalize",
+          "target": "valid",
+          "label": "normalize returns item",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "valid",
+          "target": "invalid",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "valid",
+          "target": "gateway",
+          "label": "No",
+          "route": "direct"
+        },
+        {
+          "id": "5",
+          "source": "gateway",
+          "target": "sent",
+          "label": "returns receipt",
+          "route": "direct"
+        },
+        {
+          "id": "6",
+          "source": "gateway",
+          "target": "error",
+          "label": "raises",
+          "route": "direct"
+        }
+      ],
+      "groups": [
+        {
+          "label": "Validate input",
+          "nodes": [
+            "normalize",
+            "valid",
+            "invalid"
+          ]
+        }
+      ],
+      "notes": "Call detail is a separate page. normalize returns to this call site; gateway.submit remains an unknown external boundary. No assumption of network success."
+    },
+    {
+      "id": "normalize",
+      "title": "Detail · normalize(raw)",
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "由 prepare 第 5 行调用进入",
+          "row": 0,
+          "col": 0,
+          "kind": "start",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 1,
+              "end": 1
+            }
+          ]
+        },
+        {
+          "id": "type",
+          "label": "raw is str?",
+          "row": 1,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 2,
+              "end": 2
+            }
+          ]
+        },
+        {
+          "id": "none1",
+          "label": "返回 None → prepare 判断 item",
+          "row": 2,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 3,
+              "end": 3
+            }
+          ],
+          "detail": "prepare"
+        },
+        {
+          "id": "strip",
+          "label": "value = raw.strip()",
+          "row": 3,
+          "col": 0,
+          "kind": "process",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 4,
+              "end": 4
+            }
+          ]
+        },
+        {
+          "id": "empty",
+          "label": "value 为空？",
+          "row": 4,
+          "col": 0,
+          "kind": "decision",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 5,
+              "end": 5
+            }
+          ]
+        },
+        {
+          "id": "none2",
+          "label": "返回 None → prepare 判断 item",
+          "row": 5,
+          "col": 1,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 6,
+              "end": 6
+            }
+          ],
+          "detail": "prepare"
+        },
+        {
+          "id": "value",
+          "label": "返回 value.lower() → prepare 判断 item",
+          "row": 6,
+          "col": 0,
+          "kind": "end",
+          "source": [
+            {
+              "file": "examples/source/validation.py",
+              "start": 7,
+              "end": 7
+            }
+          ],
+          "detail": "prepare"
+        }
+      ],
+      "edges": [
+        {
+          "id": "1",
+          "source": "entry",
+          "target": "type",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "2",
+          "source": "type",
+          "target": "none1",
+          "label": "No",
+          "route": "direct"
+        },
+        {
+          "id": "3",
+          "source": "type",
+          "target": "strip",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "4",
+          "source": "strip",
+          "target": "empty",
+          "label": "",
+          "route": "direct"
+        },
+        {
+          "id": "5",
+          "source": "empty",
+          "target": "none2",
+          "label": "Yes",
+          "route": "direct"
+        },
+        {
+          "id": "6",
+          "source": "empty",
+          "target": "value",
+          "label": "No",
+          "route": "direct"
+        }
+      ],
+      "notes": "Scope: ordinary str values; builtin string methods treated as primitives. Every exit returns to the prepare call at service.py:5."
+    }
+  ],
+  "coverage": {
+    "read": [
+      "examples/source/service.py:1–9",
+      "examples/source/validation.py:1–7"
+    ],
+    "unknown": [
+      "gateway.submit implementation"
+    ],
+    "unread": [],
+    "status": "Both local functions read completely; external gateway internals not available",
+    "call_sites": [
+      {
+        "caller": "prepare",
+        "file": "examples/source/service.py",
+        "line": 5,
+        "callee": "normalize",
+        "return_to": "prepare:valid"
+      }
+    ]
+  }
+}
