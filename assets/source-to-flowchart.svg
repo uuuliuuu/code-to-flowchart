@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="970" viewBox="0 0 1440 970"><title>Python source to execution flowchart</title><desc>Shipping cost code and its equivalent branches, including invalid totals, free shipping, and standard shipping.</desc>
+<rect x="0" y="0" width="1440" height="970" rx="0" fill="#f4f7fb" stroke="none" stroke-width="2"/>
+<text x="44" y="45" font-family="Arial, sans-serif" font-size="18" fill="#47658b" text-anchor="start" dominant-baseline="central">CODE-TO-FLOWCHART</text>
+<text x="44" y="103" font-family="Arial, sans-serif" font-size="44" fill="#203048" text-anchor="start" dominant-baseline="central">From source to clear logic</text>
+<text x="44" y="151" font-family="Arial, sans-serif" font-size="23" fill="#60718a" text-anchor="start" dominant-baseline="central">Follow the decisions. See every outcome.</text>
+<rect x="40" y="196" width="605" height="654" rx="18" fill="#111d31" stroke="none" stroke-width="2"/>
+<rect x="685" y="196" width="715" height="654" rx="18" fill="#ffffff" stroke="#dce5ef" stroke-width="2"/>
+<text x="68" y="235" font-family="Arial, sans-serif" font-size="18" fill="#9eb3ce" text-anchor="start" dominant-baseline="central">SOURCE  /  Python</text>
+<text x="715" y="235" font-family="Arial, sans-serif" font-size="18" fill="#60718a" text-anchor="start" dominant-baseline="central">FLOW  /  Execution paths</text>
+<text x="70" y="333" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">1</text>
+<text x="110" y="333" font-family="monospace" font-size="20" fill="#e4edff" text-anchor="start" dominant-baseline="central">def shipping_cost(total, member):</text>
+<text x="70" y="382" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">2</text>
+<text x="110" y="382" font-family="monospace" font-size="20" fill="#e4edff" text-anchor="start" dominant-baseline="central">    if total &lt; 0:</text>
+<text x="70" y="431" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">3</text>
+<text x="110" y="431" font-family="monospace" font-size="20" fill="#9fe4c1" text-anchor="start" dominant-baseline="central">        return None</text>
+<text x="70" y="480" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">4</text>
+<text x="110" y="480" font-family="monospace" font-size="20" fill="#e4edff" text-anchor="start" dominant-baseline="central">    if member or total &gt;= 100:</text>
+<text x="70" y="529" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">5</text>
+<text x="110" y="529" font-family="monospace" font-size="20" fill="#9fe4c1" text-anchor="start" dominant-baseline="central">        return 0</text>
+<text x="70" y="578" font-family="monospace" font-size="17" fill="#60718a" text-anchor="start" dominant-baseline="central">6</text>
+<text x="110" y="578" font-family="monospace" font-size="20" fill="#9fe4c1" text-anchor="start" dominant-baseline="central">    return 8</text>
+<text x="70" y="748" font-family="Arial, sans-serif" font-size="18" fill="#9eb3ce" text-anchor="start" dominant-baseline="central">Input source is read, not executed.</text>
+<text x="70" y="782" font-family="Arial, sans-serif" font-size="17" fill="#9eb3ce" text-anchor="start" dominant-baseline="central">Example: ordinary numbers and booleans.</text>
+<rect x="775.0" y="271.0" width="330" height="58" rx="22" fill="#e0f3ed" stroke="#93c1b5" stroke-width="2"/>
+<text x="940" y="300.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">shipping_cost(total, member)</text>
+<polyline points="940,329 940,360" fill="none" stroke="#506782" stroke-width="3"/>
+<polygon points="940,360 945.0,348.0 935.0,348.0" fill="#506782"/>
+<polygon points="940,360.0 1055.0,420 940,480.0 825.0,420" fill="#fff2cf" stroke="#c7b982" stroke-width="2"/>
+<text x="940" y="420.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">total &lt; 0?</text>
+<polyline points="1055,420 1170,420" fill="none" stroke="#506782" stroke-width="3"/>
+<polygon points="1170,420 1158.0,415.0 1158.0,425.0" fill="#506782"/>
+<text x="1109" y="398" font-family="Arial, sans-serif" font-size="18" fill="#203048" text-anchor="middle" dominant-baseline="central">Yes</text>
+<rect x="1170.0" y="389.0" width="190" height="62" rx="22" fill="#e0f3ed" stroke="#93c1b5" stroke-width="2"/>
+<text x="1265" y="420.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">Return None</text>
+<polyline points="940,480 940,528" fill="none" stroke="#506782" stroke-width="3"/>
+<polygon points="940,528 945.0,516.0 935.0,516.0" fill="#506782"/>
+<text x="960" y="505" font-family="Arial, sans-serif" font-size="18" fill="#203048" text-anchor="start" dominant-baseline="central">No</text>
+<polygon points="940,528.0 1080.0,605 940,682.0 800.0,605" fill="#fff2cf" stroke="#c7b982" stroke-width="2"/>
+<text x="940" y="592.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">member OR</text>
+<text x="940" y="618.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">total &gt;= 100?</text>
+<polyline points="1080,605 1170,605" fill="none" stroke="#506782" stroke-width="3"/>
+<polygon points="1170,605 1158.0,600.0 1158.0,610.0" fill="#506782"/>
+<text x="1123" y="583" font-family="Arial, sans-serif" font-size="18" fill="#203048" text-anchor="middle" dominant-baseline="central">Yes</text>
+<rect x="1170.0" y="574.0" width="190" height="62" rx="22" fill="#e0f3ed" stroke="#93c1b5" stroke-width="2"/>
+<text x="1265" y="605.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">Return 0</text>
+<polyline points="940,682 940,754" fill="none" stroke="#506782" stroke-width="3"/>
+<polygon points="940,754 945.0,742.0 935.0,742.0" fill="#506782"/>
+<text x="960" y="719" font-family="Arial, sans-serif" font-size="18" fill="#203048" text-anchor="start" dominant-baseline="central">No</text>
+<rect x="840.0" y="754.0" width="200" height="62" rx="22" fill="#e0f3ed" stroke="#93c1b5" stroke-width="2"/>
+<text x="940" y="785.0" font-family="Arial, sans-serif" font-size="20" fill="#203048" text-anchor="middle" dominant-baseline="central">Return 8</text>
+<text x="44" y="894" font-family="Arial, sans-serif" font-size="22" fill="#203048" text-anchor="start" dominant-baseline="central">English by default    /    Single-page first    /    HTML + editable drawio</text>
+<text x="44" y="933" font-family="Arial, sans-serif" font-size="16" fill="#60718a" text-anchor="start" dominant-baseline="central">Compact illustration of the bundled shipping-cost example. Generated examples are linked below.</text>
+</svg>
