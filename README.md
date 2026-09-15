@@ -2,6 +2,10 @@
 
 An Agent Skill for source-grounded execution flowcharts. AI reads pasted code, single files or a codebase and authors a traceable model; a Python standard-library script exports a self-contained zoomable HTML viewer and native editable drawio pages.
 
+![Python source and its equivalent single-page execution flowchart, showing invalid totals, free shipping and standard shipping.](assets/source-to-flowchart.png)
+
+*Compact illustration of the bundled example.* Explore the [input source](examples/source/decision.py), [generated HTML](examples/generated/decision/index.html), [editable drawio](examples/generated/decision/diagram.drawio), or [vector illustration](assets/source-to-flowchart.svg). Download the HTML file to view it locally.
+
 **This is not an automatic source parser.** The script renders an already-authored model. Source semantics, coverage and uncertainty require AI review.
 
 ## Use as a skill
